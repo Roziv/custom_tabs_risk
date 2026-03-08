@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener for adding a new logo
     if (addLogoBtn) {
         addLogoBtn.addEventListener('click', function() {
-            logosData.push({ url: '' });
+            logosData.push({ url: '', title: '' });
             renderAllLogos();
         });
     }
@@ -149,10 +149,20 @@ document.addEventListener('DOMContentLoaded', function() {
             const wrapper = document.createElement('div');
             wrapper.className = 'custom-logo-item';
             
-            const field = createMediaUploadField('Logo ' + (index + 1), logo.url, (val) => {
+            const fieldsWrapper = document.createElement('div');
+            fieldsWrapper.className = 'custom-logo-fields';
+            
+            const urlField = createMediaUploadField('Logo ' + (index + 1), logo.url, (val) => {
                 logosData[index].url = val;
             });
-            wrapper.appendChild(field);
+            fieldsWrapper.appendChild(urlField);
+            
+            const titleField = createField('textarea', 'Logo Title/Description', logo.title || '', (val) => {
+                logosData[index].title = val;
+            });
+            fieldsWrapper.appendChild(titleField);
+            
+            wrapper.appendChild(fieldsWrapper);
 
             const removeBtn = document.createElement('button');
             removeBtn.type = 'button';

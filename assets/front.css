@@ -105,14 +105,28 @@
 .custom-tabs-global-logos {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     gap: 30px;
     margin-top: 40px;
+}
+
+.custom-tab-global-logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
 }
 
 .custom-tab-global-logo {
     max-width: 150px;
     height: auto;
     object-fit: contain;
+}
+
+.custom-tab-global-logo-title {
+    font-size: 0.9em;
+    color: #555;
+    max-width: 200px;
 }

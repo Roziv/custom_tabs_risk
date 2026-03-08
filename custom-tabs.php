@@ -221,8 +221,15 @@ function custom_tabs_shortcode( $atts ) {
     <?php if ( ! empty( $logos_data ) && is_array( $logos_data ) ) : ?>
         <div class="custom-tabs-global-logos">
             <?php foreach ( $logos_data as $logo ) : ?>
-                <?php if ( ! empty( $logo['url'] ) ) : ?>
-                    <img src="<?php echo esc_url( $logo['url'] ); ?>" class="custom-tab-global-logo" alt="Global Logo">
+                <?php if ( ! empty( $logo['url'] ) || ! empty( $logo['title'] ) ) : ?>
+                    <div class="custom-tab-global-logo-wrapper">
+                        <?php if ( ! empty( $logo['url'] ) ) : ?>
+                            <img src="<?php echo esc_url( $logo['url'] ); ?>" class="custom-tab-global-logo" alt="Global Logo">
+                        <?php endif; ?>
+                        <?php if ( ! empty( $logo['title'] ) ) : ?>
+                            <div class="custom-tab-global-logo-title"><?php echo nl2br( esc_html( $logo['title'] ) ); ?></div>
+                        <?php endif; ?>
+                    </div>
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
