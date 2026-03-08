@@ -66,3 +66,18 @@
 .media-input-wrapper input[type="text"] {
     flex-grow: 1;
 }
+
+.custom-logo-item {
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ccd0d4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-logo-item .custom-tab-field {
+    flex-grow: 1;
+    margin-bottom: 0;
+}

@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const addButton = document.getElementById('custom-tabs-add-tab');
     const dataInput = document.getElementById('custom_tabs_data');
     const form = document.getElementById('custom-tabs-form');
+    
+    const logosContainer = document.getElementById('custom-logos-container');
+    const addLogoBtn = document.getElementById('custom-logos-add');
+    const logosInput = document.getElementById('custom_tabs_logos_data');
 
     // Parse existing data
     let tabsData = [];
@@ -13,9 +17,19 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (e) {
         console.error('Failed to parse Custom Tabs data:', e);
     }
+    
+    let logosData = [];
+    try {
+        if (logosInput && logosInput.value.trim() !== '') {
+            logosData = JSON.parse(logosInput.value);
+        }
+    } catch (e) {
+        console.error('Failed to parse Custom Logos data:', e);
+    }
 
     // Initialize UI
     renderAllTabs();
+    renderAllLogos();
 
     // Event listener for adding a new tab
     addButton.addEventListener('click', function() {
@@ -30,9 +44,20 @@ document.addEventListener('DOMContentLoaded', function() {
         renderAllTabs();
     });
 
+    // Event listener for adding a new logo
+    if (addLogoBtn) {
+        addLogoBtn.addEventListener('click', function() {
+            logosData.push({ url: '' });
+            renderAllLogos();
+        });
+    }
+
     // Update JSON before saving the form
     form.addEventListener('submit', function() {
         dataInput.value = JSON.stringify(tabsData);
+        if (logosInput) {
+            logosInput.value = JSON.stringify(logosData);
+        }
     });
 
     /**
@@ -110,6 +135,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
             tabEl.appendChild(body);
             container.appendChild(tabEl);
+        });
+    }
+    
+    /**
+     * Re-renders the global logos DOM based on the logosData state.
+     */
+    function renderAllLogos() {
+        if (!logosContainer) return;
+        logosContainer.innerHTML = '';
+        
+        logosData.forEach((logo, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'custom-logo-item';
+            
+            const field = createMediaUploadField('Logo ' + (index + 1), logo.url, (val) => {
+                logosData[index].url = val;
+            });
+            wrapper.appendChild(field);
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'button-link custom-tab-remove';
+            removeBtn.innerHTML = '<span class="dashicons dashicons-trash"></span> Remove Logo';
+            removeBtn.addEventListener('click', () => {
+                logosData.splice(index, 1);
+                renderAllLogos();
+            });
+
+            wrapper.appendChild(removeBtn);
+            logosContainer.appendChild(wrapper);
         });
     }
 

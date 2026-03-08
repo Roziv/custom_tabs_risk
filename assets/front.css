@@ -101,3 +101,18 @@
     margin: 0;
     font-size: 0.9em;
 }
+
+.custom-tabs-global-logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.custom-tab-global-logo {
+    max-width: 150px;
+    height: auto;
+    object-fit: contain;
+}

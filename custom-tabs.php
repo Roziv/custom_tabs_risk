@@ -30,6 +30,7 @@ add_action( 'admin_menu', 'custom_tabs_register_menu_page' );
  */
 function custom_tabs_register_settings() {
     register_setting( 'custom_tabs_settings_group', 'custom_tabs_data' );
+    register_setting( 'custom_tabs_settings_group', 'custom_tabs_logos_data' );
 }
 add_action( 'admin_init', 'custom_tabs_register_settings' );
 
@@ -70,6 +71,7 @@ function custom_tabs_render_settings_page() {
     
     // Get existing data
     $tabs_data = get_option( 'custom_tabs_data', '[]' );
+    $logos_data = get_option( 'custom_tabs_logos_data', '[]' );
     
     ?>
     <div class="wrap custom-tabs-wrap">
@@ -89,8 +91,20 @@ function custom_tabs_render_settings_page() {
                 <?php esc_html_e( '+ Add New Tab', 'custom-tabs' ); ?>
             </button>
             
-            <!-- Hidden input to store the JSON data -->
+            <hr style="margin: 40px 0;">
+            <h2>Global Logos</h2>
+            <div id="custom-logos-container">
+                <!-- Javascript will render the interactive logos here -->
+            </div>
+            
+            <button type="button" class="button button-secondary" id="custom-logos-add">
+                <?php esc_html_e( '+ Add New Logo', 'custom-tabs' ); ?>
+            </button>
+            <br><br>
+            
+            <!-- Hidden inputs to store the JSON data -->
             <input type="hidden" name="custom_tabs_data" id="custom_tabs_data" value="<?php echo esc_attr( $tabs_data ); ?>">
+            <input type="hidden" name="custom_tabs_logos_data" id="custom_tabs_logos_data" value="<?php echo esc_attr( $logos_data ); ?>">
             
             <?php submit_button( __( 'Save Changes', 'custom-tabs' ) ); ?>
         </form>
@@ -125,6 +139,9 @@ add_action( 'wp_enqueue_scripts', 'custom_tabs_enqueue_frontend_assets' );
 function custom_tabs_shortcode( $atts ) {
     $tabs_data_json = get_option( 'custom_tabs_data', '[]' );
     $tabs_data = json_decode( $tabs_data_json, true );
+    
+    $logos_data_json = get_option( 'custom_tabs_logos_data', '[]' );
+    $logos_data = json_decode( $logos_data_json, true );
 
     if ( empty( $tabs_data ) || ! is_array( $tabs_data ) ) {
         return '';
@@ -200,6 +217,17 @@ function custom_tabs_shortcode( $atts ) {
             <?php endforeach; ?>
         </div>
     </div>
+    
+    <?php if ( ! empty( $logos_data ) && is_array( $logos_data ) ) : ?>
+        <div class="custom-tabs-global-logos">
+            <?php foreach ( $logos_data as $logo ) : ?>
+                <?php if ( ! empty( $logo['url'] ) ) : ?>
+                    <img src="<?php echo esc_url( $logo['url'] ); ?>" class="custom-tab-global-logo" alt="Global Logo">
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
     <?php
 
     return ob_get_clean();
