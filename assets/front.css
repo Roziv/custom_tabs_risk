@@ -1,0 +1,103 @@
+.custom-tabs-wrapper {
+    font-family: inherit;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.custom-tabs-nav {
+    display: flex;
+    background: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-tab-button {
+    background: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 20px;
+    transition: 0.3s;
+    font-size: 16px;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.custom-tab-button:hover {
+    background-color: #ddd;
+}
+
+.custom-tab-button.active {
+    background-color: #fff;
+    border-bottom: 2px solid #0073aa;
+    font-weight: bold;
+}
+
+.custom-tab-panel {
+    display: none;
+    padding: 20px;
+    background: #fff;
+    animation: fadeEffect 0.5s;
+}
+
+.custom-tab-panel.active {
+    display: block;
+}
+
+@keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+/* Panel Internal Styling */
+.custom-tab-section {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.custom-tab-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.custom-tab-quote {
+    font-style: italic;
+    font-size: 1.1em;
+    color: #555;
+    border-left: 4px solid #0073aa;
+    padding-left: 10px;
+    margin-bottom: 15px;
+}
+
+.custom-tab-image, .custom-tab-logo {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+}
+
+.custom-tab-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.custom-tab-profile img {
+    max-width: 60px;
+    border-radius: 50%;
+}
+
+.custom-tab-name {
+    font-weight: bold;
+    margin: 0;
+}
+
+.custom-tab-job-title {
+    color: #777;
+    margin: 0;
+    font-size: 0.9em;
+}

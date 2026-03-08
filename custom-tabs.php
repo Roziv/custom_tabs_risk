@@ -97,3 +97,111 @@ function custom_tabs_render_settings_page() {
     </div>
     <?php
 }
+
+/**
+ * Enqueue frontend scripts and styles.
+ */
+function custom_tabs_enqueue_frontend_assets() {
+    wp_enqueue_style(
+        'custom-tabs-front-css',
+        plugin_dir_url( __FILE__ ) . 'assets/front.css',
+        array(),
+        '1.0.0'
+    );
+
+    wp_enqueue_script(
+        'custom-tabs-front-js',
+        plugin_dir_url( __FILE__ ) . 'assets/front.js',
+        array(),
+        '1.0.0',
+        true
+    );
+}
+add_action( 'wp_enqueue_scripts', 'custom_tabs_enqueue_frontend_assets' );
+
+/**
+ * Render the Custom Tabs shortcode.
+ */
+function custom_tabs_shortcode( $atts ) {
+    $tabs_data_json = get_option( 'custom_tabs_data', '[]' );
+    $tabs_data = json_decode( $tabs_data_json, true );
+
+    if ( empty( $tabs_data ) || ! is_array( $tabs_data ) ) {
+        return '';
+    }
+
+    ob_start();
+    ?>
+    <div class="custom-tabs-wrapper">
+        <!-- Tabs Navigation -->
+        <div class="custom-tabs-nav">
+            <?php foreach ( $tabs_data as $index => $tab ) : ?>
+                <button class="custom-tab-button <?php echo $index === 0 ? 'active' : ''; ?>" data-tab="custom-tab-<?php echo esc_attr( $index ); ?>">
+                    <?php echo esc_html( $tab['title'] ?? '' ); ?>
+                </button>
+            <?php endforeach; ?>
+        </div>
+        
+        <!-- Tabs Content Panels -->
+        <div class="custom-tabs-content">
+            <?php foreach ( $tabs_data as $index => $tab ) : ?>
+                <div class="custom-tab-panel <?php echo $index === 0 ? 'active' : ''; ?>" id="custom-tab-<?php echo esc_attr( $index ); ?>">
+                    
+                    <?php if ( ! empty( $tab['section1'] ) ) : $s1 = $tab['section1']; ?>
+                        <div class="custom-tab-section custom-tab-section-1">
+                            <?php if ( ! empty( $s1['quote'] ) ) : ?>
+                                <div class="custom-tab-quote">"<?php echo esc_html( $s1['quote'] ); ?>"</div>
+                            <?php endif; ?>
+                            
+                            <?php if ( ! empty( $s1['image'] ) ) : ?>
+                                <img src="<?php echo esc_url( $s1['image'] ); ?>" class="custom-tab-image" alt="Tab Image">
+                            <?php endif; ?>
+                            
+                            <?php if ( ! empty( $s1['name'] ) || ! empty( $s1['title'] ) || ! empty( $s1['logo'] ) ) : ?>
+                                <div class="custom-tab-profile">
+                                    <?php if ( ! empty( $s1['logo'] ) ) : ?>
+                                        <img src="<?php echo esc_url( $s1['logo'] ); ?>" class="custom-tab-logo" alt="Tab Logo">
+                                    <?php endif; ?>
+                                    <div>
+                                        <p class="custom-tab-name"><?php echo esc_html( $s1['name'] ?? '' ); ?></p>
+                                        <p class="custom-tab-job-title"><?php echo esc_html( $s1['title'] ?? '' ); ?></p>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if ( ! empty( $tab['section2'] ) ) : $s2 = $tab['section2']; ?>
+                        <div class="custom-tab-section custom-tab-section-2">
+                            <?php if ( ! empty( $s2['box1'] ) ) : ?>
+                                <p><?php echo esc_html( $s2['box1'] ); ?></p>
+                            <?php endif; ?>
+                            <?php if ( ! empty( $s2['box2'] ) ) : ?>
+                                <p><?php echo esc_html( $s2['box2'] ); ?></p>
+                            <?php endif; ?>
+                            <?php if ( ! empty( $s2['content'] ) && empty( $s2['box1'] ) && empty( $s2['box2'] ) ) : ?>
+                                <p><?php echo esc_html( $s2['content'] ); ?></p>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if ( ! empty( $tab['section3'] ) ) : $s3 = $tab['section3']; ?>
+                        <div class="custom-tab-section custom-tab-section-3">
+                            <?php if ( ! empty( $s3['box1'] ) ) : ?>
+                                <p><?php echo esc_html( $s3['box1'] ); ?></p>
+                            <?php endif; ?>
+                            <?php if ( ! empty( $s3['content'] ) && empty( $s3['box1'] ) ) : ?>
+                                <p><?php echo esc_html( $s3['content'] ); ?></p>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                    
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode( 'custom_tabs', 'custom_tabs_shortcode' );
