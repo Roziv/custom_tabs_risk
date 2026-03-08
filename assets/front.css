@@ -79,6 +79,17 @@
     margin: 10px 0;
 }
 
+.custom-tab-layout-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.custom-tab-layout-col {
+    flex: 1;
+    min-width: 300px;
+}
+
 .custom-tab-profile {
     display: flex;
     align-items: center;
