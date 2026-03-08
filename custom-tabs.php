@@ -31,6 +31,7 @@ add_action( 'admin_menu', 'custom_tabs_register_menu_page' );
 function custom_tabs_register_settings() {
     register_setting( 'custom_tabs_settings_group', 'custom_tabs_data' );
     register_setting( 'custom_tabs_settings_group', 'custom_tabs_logos_data' );
+    register_setting( 'custom_tabs_settings_group', 'custom_tabs_logos_title' );
 }
 add_action( 'admin_init', 'custom_tabs_register_settings' );
 
@@ -72,6 +73,7 @@ function custom_tabs_render_settings_page() {
     // Get existing data
     $tabs_data = get_option( 'custom_tabs_data', '[]' );
     $logos_data = get_option( 'custom_tabs_logos_data', '[]' );
+    $logos_title = get_option( 'custom_tabs_logos_title', '' );
     
     ?>
     <div class="wrap custom-tabs-wrap">
@@ -92,7 +94,13 @@ function custom_tabs_render_settings_page() {
             </button>
             
             <hr style="margin: 40px 0;">
-            <h2>Global Logos</h2>
+            <h2>Global Logos Section</h2>
+            
+            <div style="margin-bottom: 20px;">
+                <label for="custom_tabs_logos_title" style="display:block; font-weight:600; margin-bottom:5px;">Section Title / Description</label>
+                <textarea name="custom_tabs_logos_title" id="custom_tabs_logos_title" rows="2" class="large-text"><?php echo esc_textarea( $logos_title ); ?></textarea>
+            </div>
+
             <div id="custom-logos-container">
                 <!-- Javascript will render the interactive logos here -->
             </div>
@@ -142,6 +150,8 @@ function custom_tabs_shortcode( $atts ) {
     
     $logos_data_json = get_option( 'custom_tabs_logos_data', '[]' );
     $logos_data = json_decode( $logos_data_json, true );
+    
+    $logos_title = get_option( 'custom_tabs_logos_title', '' );
 
     if ( empty( $tabs_data ) || ! is_array( $tabs_data ) ) {
         return '';
@@ -219,17 +229,13 @@ function custom_tabs_shortcode( $atts ) {
     </div>
     
     <?php if ( ! empty( $logos_data ) && is_array( $logos_data ) ) : ?>
+        <?php if ( ! empty( $logos_title ) ) : ?>
+            <div class="custom-tab-global-title"><?php echo nl2br( esc_html( $logos_title ) ); ?></div>
+        <?php endif; ?>
         <div class="custom-tabs-global-logos">
             <?php foreach ( $logos_data as $logo ) : ?>
-                <?php if ( ! empty( $logo['url'] ) || ! empty( $logo['title'] ) ) : ?>
-                    <div class="custom-tab-global-logo-wrapper">
-                        <?php if ( ! empty( $logo['url'] ) ) : ?>
-                            <img src="<?php echo esc_url( $logo['url'] ); ?>" class="custom-tab-global-logo" alt="Global Logo">
-                        <?php endif; ?>
-                        <?php if ( ! empty( $logo['title'] ) ) : ?>
-                            <div class="custom-tab-global-logo-title"><?php echo nl2br( esc_html( $logo['title'] ) ); ?></div>
-                        <?php endif; ?>
-                    </div>
+                <?php if ( ! empty( $logo['url'] ) ) : ?>
+                    <img src="<?php echo esc_url( $logo['url'] ); ?>" class="custom-tab-global-logo" alt="Global Logo">
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
